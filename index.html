@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portland Bucket List Checklist</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --checked-text: #64748b;
+      --deleted-text: #dc2626;
+      --deleted-bg: #fef2f2;
+      --accent: #0f766e;
+      --border: #e2e8f0;
+    }
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 760px;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      padding: 2rem;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.75rem;
+      color: var(--accent);
+    }
+    p.subtitle {
+      margin-top: -0.5rem;
+      color: #64748b;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: #475569;
+    }
+    .reset-btn {
+      background: none;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #475569;
+    }
+    .reset-btn:hover {
+      background: #f1f5f9;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li.item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+    }
+    li.item:hover {
+      background-color: #f8fafc;
+    }
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex: 1;
+      cursor: pointer;
+    }
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+    .item-title {
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+    /* Checked State: Moved to bottom, visible, strikethrough font */
+    li.item.checked {
+      background-color: #f8fafc;
+    }
+    li.item.checked .item-title {
+      text-decoration: line-through;
+      color: var(--checked-text);
+      font-style: italic;
+    }
+    /* Deleted State: Moved to bottom, red & distinct font with trashcan icon */
+    li.item.deleted {
+      background-color: var(--deleted-bg);
+    }
+    li.item.deleted .item-title {
+      color: var(--deleted-text);
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 600;
+    }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-left: 1rem;
+    }
+    .btn-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .btn-delete:hover {
+      background: #fee2e2;
+    }
+    .btn-restore {
+      font-size: 0.8rem;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+    }
+    .btn-restore:hover {
+      background: #f1f5f9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Quintessential Portland Bucket List</h1>
+    <p class="subtitle">Source: <a href="https://www.pdxmonthly.com/arts-and-culture/what-to-do-in-portland" target="_blank">Portland Monthly (50 Things to Do in Town)</a></p>
+    
+    <div class="controls">
+      <span id="stats">Loading...</span>
+      <button class="reset-btn" onclick="resetList()">Reset All</button>
+    </div>
+
+    <ul id="checklist"></ul>
+  </div>
+
+  <script>
+    const defaultItems = [
+      { id: 1, title: "1. Get lost in the stacks at Powell's Books' flagship store (Pearl District)", status: "active" },
+      { id: 2, title: "2. Wander through the Portland Farmers Market at PSU (Downtown)", status: "active" },
+      { id: 3, title: "3. Cheer on a hometown team (Timbers or Thorns) in Soccer City USA (Goose Hollow)", status: "active" },
+      { id: 4, title: "4. Graze your way through a food cart pod (Prost Marketplace, Hawthorne Asylum, Midtown Beer Garden)", status: "active" },
+      { id: 5, title: "5. Take a hike in Forest Park and see the Witch's Castle (Northwest Portland)", status: "active" },
+      { id: 6, title: "6. Settle in for a flick at the Hollywood Theatre (Hollywood)", status: "active" },
+      { id: 7, title: "7. Join a group bike ride or Pedalpalooza (Across the city)", status: "active" },
+      { id: 8, title: "8. Be a citizen of Rip City (Trail Blazers) or the Fire Pit (Portland Fire) (Lloyd)", status: "active" },
+      { id: 9, title: "9. Brag about the PDX airport and visit the Aurora speakeasy (Sunderland)", status: "active" },
+      { id: 10, title: "10. Catch a show or drag brunch at Darcelle XV Showplace (Old Town-Chinatown)", status: "active" },
+      { id: 11, title: "11. Attend a concert or farm-to-plate dinner at Topaz Farm (Sauvie Island)", status: "active" },
+      { id: 12, title: "12. Sip tea at the Lan Su Chinese Garden (Old Town-Chinatown)", status: "active" },
+      { id: 13, title: "13. Wave at animals at the Oregon Zoo (Washington Park)", status: "active" },
+      { id: 14, title: "14. Find your new favorite record (or artist) at Music Millennium (Kerns)", status: "active" },
+      { id: 15, title: "15. Take a pilgrimage to Multnomah Falls (Columbia River Gorge)", status: "active" },
+      { id: 16, title: "16. Do the Time Warp at The Rocky Horror Picture Show at Clinton Street Theater", status: "active" },
+      { id: 17, title: "17. Peep the view at Council Crest (Southwest Hills)", status: "active" },
+      { id: 18, title: "18. Grab mini doughnuts and house-mixed chai at Pip's Original (Cully)", status: "active" },
+      { id: 19, title: "19. Go roller skating (and maybe ride a roller coaster) at Oaks Amusement Park (Sellwood)", status: "active" },
+      { id: 20, title: "20. Pursue pleasure at She Bop (Boise/Richmond)", status: "active" },
+      { id: 21, title: "21. Search for trilliums at Tryon Creek State Natural Area (Southwest Portland)", status: "active" },
+      { id: 22, title: "22. Grab a scoop of authentic gelato at Pinolo Gelato (Division/Clinton)", status: "active" },
+      { id: 23, title: "23. Go kayaking or paddleboarding (Across the city)", status: "active" },
+      { id: 24, title: "24. Stroll the Portland Japanese Garden (Washington Park)", status: "active" },
+      { id: 25, title: "25. Lend a helping hand with a SOLVE cleanup (Citywide)", status: "active" },
+      { id: 26, title: "26. Get crafty at the Pendleton Woolen Mill Store (Milwaukie)", status: "active" },
+      { id: 27, title: "27. Be a patron of the arts at the Portland Art Museum & Rothko Pavilion (Downtown)", status: "active" },
+      { id: 28, title: "28. Catch a show and visit the Roof Deck Bar at Revolution Hall (Buckman)", status: "active" },
+      { id: 29, title: "29. Take a walk with Ramona Quimby
