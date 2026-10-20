@@ -1,191 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portland Bucket List Checklist</title>
-  <style>
-    :root {
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #1e293b;
-      --checked-text: #64748b;
-      --deleted-text: #dc2626;
-      --deleted-bg: #fef2f2;
-      --accent: #0f766e;
-      --border: #e2e8f0;
-    }
-    body {
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 2rem 1rem;
-      display: flex;
-      justify-content: center;
-    }
-    .container {
-      width: 100%;
-      max-width: 760px;
-      background: var(--card);
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      padding: 2rem;
-    }
-    h1 {
-      margin-top: 0;
-      font-size: 1.75rem;
-      color: var(--accent);
-    }
-    p.subtitle {
-      margin-top: -0.5rem;
-      color: #64748b;
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-    }
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
-      color: #475569;
-    }
-    .reset-btn {
-      background: none;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 0.35rem 0.75rem;
-      cursor: pointer;
-      font-size: 0.85rem;
-      color: #475569;
-    }
-    .reset-btn:hover {
-      background: #f1f5f9;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    li.item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid var(--border);
-      transition: background-color 0.2s ease, opacity 0.2s ease;
-    }
-    li.item:hover {
-      background-color: #f8fafc;
-    }
-    .item-left {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      flex: 1;
-      cursor: pointer;
-    }
-    input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: var(--accent);
-      flex-shrink: 0;
-    }
-    .item-title {
-      font-size: 1rem;
-      line-height: 1.4;
-    }
-    /* Checked State: Moved to bottom, visible, strikethrough font */
-    li.item.checked {
-      background-color: #f8fafc;
-    }
-    li.item.checked .item-title {
-      text-decoration: line-through;
-      color: var(--checked-text);
-      font-style: italic;
-    }
-    /* Deleted State: Moved to bottom, red & distinct font with trashcan icon */
-    li.item.deleted {
-      background-color: var(--deleted-bg);
-    }
-    li.item.deleted .item-title {
-      color: var(--deleted-text);
-      font-family: 'Courier New', Courier, monospace;
-      font-weight: 600;
-    }
-    .actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-left: 1rem;
-    }
-    .btn-icon {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.1rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-      transition: background 0.15s;
-    }
-    .btn-delete:hover {
-      background: #fee2e2;
-    }
-    .btn-restore {
-      font-size: 0.8rem;
-      color: #475569;
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-    }
-    .btn-restore:hover {
-      background: #f1f5f9;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portland Bucket List Checklist</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f8fafc; color: #1e293b; margin: 0; padding: 2rem 1rem; display: flex; justify-content: center; }
+  .container { width: 100%; max-width: 760px; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); padding: 2rem; }
+  h1 { margin-top: 0; font-size: 1.75rem; color: #0f766e; }
+  p.subtitle { margin: -0.5rem 0 1.5rem; color: #64748b; font-size: 0.95rem; }
+  .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; color: #475569; }
+  .reset-btn, .btn-restore { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.75rem; cursor: pointer; font-size: 0.85rem; color: #475569; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li.item { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1rem; border-bottom: 1px solid #e2e8f0; }
+  .item-left { display: flex; align-items: center; gap: 0.85rem; flex: 1; cursor: pointer; }
+  input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #0f766e; flex-shrink: 0; }
+  li.item.checked { background: #f8fafc; }
+  li.item.checked .item-title { text-decoration: line-through; color: #64748b; font-style: italic; }
+  li.item.deleted { background: #fef2f2; }
+  li.item.deleted .item-title { color: #dc2626; font-family: 'Courier New', monospace; font-weight: 600; }
+  .btn-delete { background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 0.25rem 0.5rem; border-radius: 6px; }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Your Quintessential Portland Bucket List</h1>
-    <p class="subtitle">Source: <a href="https://www.pdxmonthly.com/arts-and-culture/what-to-do-in-portland" target="_blank">Portland Monthly (50 Things to Do in Town)</a></p>
-    
-    <div class="controls">
-      <span id="stats">Loading...</span>
-      <button class="reset-btn" onclick="resetList()">Reset All</button>
-    </div>
-
-    <ul id="checklist"></ul>
+<div class="container">
+  <h1>Your Quintessential Portland Bucket List</h1>
+  <p class="subtitle">Source: <a href="https://www.pdxmonthly.com/arts-and-culture/what-to-do-in-portland" target="_blank">Portland Monthly (50 Things to Do in Town)</a></p>
+  <div class="controls">
+    <span id="stats">Loading...</span>
+    <button class="reset-btn" onclick="resetList()">Reset All</button>
   </div>
+  <ul id="checklist"></ul>
+</div>
+<script>
+const raw = [
+  "1. Get lost in the stacks at Powell's Books' flagship store (Pearl District)",
+  "2. Wander through the Portland Farmers Market at PSU (Downtown)",
+  "3. Cheer on a hometown team (Timbers or Thorns) in Soccer City USA (Goose Hollow)",
+  "4. Graze your way through a food cart pod (Prost Marketplace, Hawthorne Asylum)",
+  "5. Take a hike in Forest Park and see the Witch's Castle (Northwest Portland)",
+  "6. Settle in for a flick at the Hollywood Theatre (Hollywood)",
+  "7. Join a group bike ride or Pedalpalooza (Across the city)",
+  "8. Be a citizen of Rip City (Trail Blazers) or the Fire Pit (Portland Fire) (Lloyd)",
+  "9. Brag about the PDX airport and visit the Aurora speakeasy (Sunderland)",
+  "10. Catch a show or drag brunch at Darcelle XV Showplace (Old Town-Chinatown)",
+  "11. Attend a concert or farm-to-plate dinner at Topaz Farm (Sauvie Island)",
+  "12. Sip tea at the Lan Su Chinese Garden (Old Town-Chinatown)",
+  "13. Wave at animals at the Oregon Zoo (Washington Park)",
+  "14. Find your new favorite record (or artist) at Music Millennium (Kerns)",
+  "15. Take a pilgrimage to Multnomah Falls (Columbia River Gorge)",
+  "16. Do the Time Warp at The Rocky Horror Picture Show at Clinton Street Theater",
+  "17. Peep the view at Council Crest (Southwest Hills)",
+  "18. Grab mini doughnuts and house-mixed chai at Pip's Original (Cully)",
+  "19. Go roller skating at Oaks Amusement Park (Sellwood)",
+  "20. Pursue pleasure at She Bop (Boise/Richmond)",
+  "21. Search for trilliums at Tryon Creek State Natural Area (Southwest Portland)",
+  "22. Grab a scoop of authentic gelato at Pinolo Gelato (Division/Clinton)",
+  "23. Go kayaking or paddleboarding (Across the city)",
+  "24. Stroll the Portland Japanese Garden (Washington Park)",
+  "25. Lend a helping hand with a SOLVE cleanup (Citywide)",
+  "26. Get crafty at the Pendleton Woolen Mill Store (Milwaukie)",
+  "27. Be a patron of the arts at the Portland Art Museum & Rothko Pavilion (Downtown)",
+  "28. Catch a show and visit the Roof Deck Bar at Revolution Hall (Buckman)",
+  "29. Take a walk with Ramona Quimby (Hollywood & Grant Park)",
+  "30. Sample Portland's third-wave coffee and specialty espresso extractions",
+  "31. Take in a show at Portland Center Stage at The Armory (Pearl District)",
+  "32. Find gender-inclusive, genre-evading fashion at Wildfang (Downtown)",
+  "33. Geek out at the Oregon Museum of Science & Industry (OMSI) (Hosford-Abernethy)",
+  "34. Go back in time at the Oregon Historical Society (Downtown)",
+  "35. Smell the blooms at the International Rose Test Garden (Washington Park)",
+  "36. Thumb through a Parisian-inspired mess of books at Mother Foucault's Bookshop",
+  "37. Eat a raspberry fool off a rotating table at Rimsky-Korsakoffee House (Buckman)",
+  "38. Hike or picnic atop an extinct volcano at Mt. Tabor Park (Mt. Tabor)",
+  "39. Meet Dillon T. Pickle at a Portland Pickles game (Lents)",
+  "40. Let chicken and rice change your life at Nong's Khao Man Gai (Buckman)",
+  "41. Dance up a storm at the Goodfoot (Kerns)",
+  "42. Get steamy at a local sauna or soak spot (In town or in the mountains)",
+  "43. Stock up on secondhand craft supplies at SCRAP Creative Reuse",
+  "44. Hunt for treasures new and old in the Central Eastside Industrial District",
+  "45. Enjoy a medley and a mai-tai at the Alibi Tiki Lounge (Overlook)",
+  "46. Bike the waterfront loop (Downtown/Central Eastside Industrial District)",
+  "47. Pick up a few kinds of greenery at Somewhere (Northwest)",
+  "48. Lean over a steaming bowl at the Hà VL empire",
+  "49. Raise a glass at a local brewery",
+  "50. Jump in the Willamette River"
+];
 
-  <script>
-    const defaultItems = [
-      { id: 1, title: "1. Get lost in the stacks at Powell's Books' flagship store (Pearl District)", status: "active" },
-      { id: 2, title: "2. Wander through the Portland Farmers Market at PSU (Downtown)", status: "active" },
-      { id: 3, title: "3. Cheer on a hometown team (Timbers or Thorns) in Soccer City USA (Goose Hollow)", status: "active" },
-      { id: 4, title: "4. Graze your way through a food cart pod (Prost Marketplace, Hawthorne Asylum, Midtown Beer Garden)", status: "active" },
-      { id: 5, title: "5. Take a hike in Forest Park and see the Witch's Castle (Northwest Portland)", status: "active" },
-      { id: 6, title: "6. Settle in for a flick at the Hollywood Theatre (Hollywood)", status: "active" },
-      { id: 7, title: "7. Join a group bike ride or Pedalpalooza (Across the city)", status: "active" },
-      { id: 8, title: "8. Be a citizen of Rip City (Trail Blazers) or the Fire Pit (Portland Fire) (Lloyd)", status: "active" },
-      { id: 9, title: "9. Brag about the PDX airport and visit the Aurora speakeasy (Sunderland)", status: "active" },
-      { id: 10, title: "10. Catch a show or drag brunch at Darcelle XV Showplace (Old Town-Chinatown)", status: "active" },
-      { id: 11, title: "11. Attend a concert or farm-to-plate dinner at Topaz Farm (Sauvie Island)", status: "active" },
-      { id: 12, title: "12. Sip tea at the Lan Su Chinese Garden (Old Town-Chinatown)", status: "active" },
-      { id: 13, title: "13. Wave at animals at the Oregon Zoo (Washington Park)", status: "active" },
-      { id: 14, title: "14. Find your new favorite record (or artist) at Music Millennium (Kerns)", status: "active" },
-      { id: 15, title: "15. Take a pilgrimage to Multnomah Falls (Columbia River Gorge)", status: "active" },
-      { id: 16, title: "16. Do the Time Warp at The Rocky Horror Picture Show at Clinton Street Theater", status: "active" },
-      { id: 17, title: "17. Peep the view at Council Crest (Southwest Hills)", status: "active" },
-      { id: 18, title: "18. Grab mini doughnuts and house-mixed chai at Pip's Original (Cully)", status: "active" },
-      { id: 19, title: "19. Go roller skating (and maybe ride a roller coaster) at Oaks Amusement Park (Sellwood)", status: "active" },
-      { id: 20, title: "20. Pursue pleasure at She Bop (Boise/Richmond)", status: "active" },
-      { id: 21, title: "21. Search for trilliums at Tryon Creek State Natural Area (Southwest Portland)", status: "active" },
-      { id: 22, title: "22. Grab a scoop of authentic gelato at Pinolo Gelato (Division/Clinton)", status: "active" },
-      { id: 23, title: "23. Go kayaking or paddleboarding (Across the city)", status: "active" },
-      { id: 24, title: "24. Stroll the Portland Japanese Garden (Washington Park)", status: "active" },
-      { id: 25, title: "25. Lend a helping hand with a SOLVE cleanup (Citywide)", status: "active" },
-      { id: 26, title: "26. Get crafty at the Pendleton Woolen Mill Store (Milwaukie)", status: "active" },
-      { id: 27, title: "27. Be a patron of the arts at the Portland Art Museum & Rothko Pavilion (Downtown)", status: "active" },
-      { id: 28, title: "28. Catch a show and visit the Roof Deck Bar at Revolution Hall (Buckman)", status: "active" },
-      { id: 29, title: "29. Take a walk with Ramona Quimby
+const defaults = raw.map((t, i) => ({ id: i + 1, title: t, status: "active" }));
+let items = JSON.parse(localStorage.getItem("pdx_bucket_list") || "null") || defaults;
+
+function save() {
+  localStorage.setItem("pdx_bucket_list", JSON.stringify(items));
+  render();
+}
+function toggle(id) {
+  items = items.map(x => x.id === id ? { ...x, status: x.status === "checked" ? "active" : "checked", ts: Date.now() } : x);
+  save();
+}
+function del(id) {
+  items = items.map(x => x.id === id ? { ...x, status: "deleted", ts: Date.now() } : x);
+  save();
+}
+function restore(id) {
+  items = items.map(x => x.id === id ? { ...x, status: "active", ts: 0 } : x);
+  save();
+}
+function resetList() {
+  if (confirm("Reset all items back to active?")) { items = defaults; save(); }
+}
+function render() {
+  const ul = document.getElementById("checklist");
+  ul.innerHTML = "";
+  const w = { active: 0, checked: 1, deleted: 2 };
+  const sorted = [...items].sort((a, b) => w[a.status] - w[b.status] || (a.status === "active" ? a.id - b.id : (a.ts || 0) - (b.ts || 0)));
+  document.getElementById("stats").textContent =
+    items.filter(x => x.status === "active").length + " remaining · " +
+    items.filter(x => x.status === "checked").length + " completed · " +
+    items.filter(x => x.status === "deleted").length + " deleted";
+
+  sorted.forEach(item => {
+    const li = document.createElement("li");
+    li.className = "item " + item.status;
+    const left = document.createElement("div");
+    left.className = "item-left";
+    if (item.status !== "deleted") {
+      left.onclick = () => toggle(item.id);
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = item.status === "checked";
+      cb.onclick = e => e.stopPropagation();
+      cb.onchange = () => toggle(item.id);
+      left.appendChild(cb);
+    }
+    const span = document.createElement("span");
+    span.className = "item-title";
+    span.textContent = item.status === "deleted" ? "🗑️ " + item.title : item.title;
+    left.appendChild(span);
+
+    const btn = document.createElement("button");
+    btn.className = item.status === "deleted" ? "btn-restore" : "btn-delete";
+    btn.textContent = item.status === "deleted" ? "Undo" : "🗑️";
+    btn.onclick = () => item.status === "deleted" ? restore(item.id) : del(item.id);
+
+    li.append(left, btn);
+    ul.appendChild(li);
+  });
+}
+render();
+</script>
+</body>
+</html>
